@@ -44,29 +44,19 @@ class _LoginPageState extends State<LoginPage>{
             TextField(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
+                icon: Icon(Icons.person),
                 hintText: 'Username',
               ),
             ),
-            SizedBox(height: 30),
-            //text field passworrd
-            //password con opcion a verlo
-            /*
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Password',
-                //ver password
-                suffixIcon: Icon(Icons.visibility),
-              ),
-
-            ),*/
-
-          //PASSWORD CON OCPION A VERLO 
+            SizedBox(height: 30, ),
             TextField(
               obscureText: _obscureText,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
+                
+                icon: Icon(Icons.security) ,
+                
+                
                 hintText: 'Password',
                 //ver password
                 suffixIcon: IconButton(
@@ -79,7 +69,7 @@ class _LoginPageState extends State<LoginPage>{
             ),
           
 
-            SizedBox(height: 30),
+            SizedBox(height: 50),
 
             ElevatedButton(
               onPressed: () {
@@ -87,6 +77,7 @@ class _LoginPageState extends State<LoginPage>{
               },
               child: Text('Login', 
               style: TextStyle(fontSize: 25)),
+              
               
               
             ),
