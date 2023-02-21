@@ -10,22 +10,22 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage>{
-
+class _LoginPageState extends State<LoginPage> {
   bool _obscureText = true;
 
-  void _toogleObscureText(){
+  void _toogleObscureText() {
     setState(() {
       _obscureText = !_obscureText;
     });
   }
-  @override
 
-  Widget build(BuildContext context){
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gestion de tareas',
-        style: TextStyle(fontSize: 20),
+        title: Text(
+          'Gestion de tareas',
+          style: TextStyle(fontSize: 20),
         ),
       ),
       body: Center(
@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage>{
               size: 200,
               color: Color.fromARGB(255, 177, 16, 129),
             ),
-            //espacio 
+            //espacio
             SizedBox(height: 100),
             TextField(
               decoration: InputDecoration(
@@ -48,26 +48,26 @@ class _LoginPageState extends State<LoginPage>{
                 hintText: 'Username',
               ),
             ),
-            SizedBox(height: 30, ),
+            SizedBox(
+              height: 30,
+            ),
             TextField(
               obscureText: _obscureText,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                
-                icon: Icon(Icons.security) ,
-                
-                
+
+                icon: Icon(Icons.security),
+
                 hintText: 'Password',
                 //ver password
                 suffixIcon: IconButton(
-                  icon: Icon(_obscureText ? Icons.visibility: Icons.visibility_off),
+                  icon: Icon(
+                      _obscureText ? Icons.visibility : Icons.visibility_off),
                   onPressed: _toogleObscureText,
-                    // Respond to button press
-                  
+                  // Respond to button press
                 ),
               ),
             ),
-          
 
             SizedBox(height: 50),
 
@@ -75,17 +75,11 @@ class _LoginPageState extends State<LoginPage>{
               onPressed: () {
                 // Respond to button press
               },
-              child: Text('Login', 
-              style: TextStyle(fontSize: 25)),
-              
-              
-              
+              child: Text('Login', style: TextStyle(fontSize: 25)),
             ),
-            
           ],
         ),
       ),
     );
   }
-
 }
