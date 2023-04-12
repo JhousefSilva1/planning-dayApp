@@ -1,17 +1,10 @@
-// ignore_for_file: override_on_non_overriding_member
+
 import 'package:flutter/material.dart';
-import 'package:tasks/ui/home_page.dart';
-import 'package:tasks/ui/home_tasks_page.dart';
-//import material dart file
 
-//import material dart
-
-
-import 'package:tasks/ui/login_page.dart';
-//impor
 
 void main ()=> runApp(MyApp());
 
+// ignore: use_key_in_widget_constructors
 class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context){
@@ -23,10 +16,7 @@ class MyApp extends StatelessWidget{
 
       initialRoute: "/",
       routes: {
-        "/": (context) => HomePage(),
-        "/login":(context) => LoginPage(),
-        '/tasks': (context) => HomeTasksPage(),
-        
+
         
       },
      
