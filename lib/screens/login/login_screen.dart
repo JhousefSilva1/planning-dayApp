@@ -14,7 +14,7 @@ class LoginPage extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.network(
-              'https://picsum.photos/400/800',
+              'https://picsum.photos/400',
               fit: BoxFit.cover,
             ),
           ),
