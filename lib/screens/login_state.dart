@@ -1,4 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
+
+import 'home_task_screen.dart';
 
 abstract class LoginState extends Equatable {
   const LoginState();
@@ -9,9 +12,13 @@ abstract class LoginState extends Equatable {
 
 class LoginInitial extends LoginState {}
 
-class LoginLoading extends LoginState {}
+class LoginLoading extends LoginState {
+  const LoginLoading();
+}
 
-class LoginSuccess extends LoginState {}
+class LoginSuccess extends LoginState {
+  
+}
 
 class LoginFailure extends LoginState {
   final String errorMessage;

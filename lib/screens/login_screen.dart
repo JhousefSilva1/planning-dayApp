@@ -1,7 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tasks/cubit/login_cubit.dart';
+import 'package:tasks/screens/home_task_screen.dart';
 import 'package:tasks/screens/login_state.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -9,7 +11,10 @@ class LoginScreen extends StatefulWidget {
 
   static const ruterName = '/login';
 
+  const LoginScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _LoginScreenState createState() => _LoginScreenState();
 }
 
@@ -18,11 +23,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passworddController = TextEditingController();
 
   void _onLoginButtonPressed() {
+    // ignore: unused_local_variable
     final username = _usernameController.text;
+    // ignore: unused_local_variable
     final passwordd = _passworddController.text;
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,33 +125,60 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Icon(
-                    Icons.account_circle,
+                    Icons.account_circle_rounded,
                     size: 200.0,
                     color: Colors.blue,
                   ),
                   const SizedBox(height: 16.0),
-                  TextFormField(
-                    controller: _usernameController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Usuario',
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: TextFormField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                        border: InputBorder.none,
+                        labelText: 'Usuario',
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16.0),
-                  TextFormField(
-                    controller: _passworddController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Contraseña',
+                  //
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: TextFormField(
+                      controller: _passworddController,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                        border: InputBorder.none,
+                        labelText: 'Contraseña',
+                      ),
                     ),
                   ),
                   const SizedBox(height: 32.0),
-                  ElevatedButton(
-                    onPressed:
-                        state is! LoginLoading ? _onLoginButtonPressed : null,
-                    child: state is LoginLoading
-                        ? const CircularProgressIndicator()
-                        : const Text('Iniciar sesión'),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: ElevatedButton(
+                        //
+                        onPressed: () {
+
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          textStyle: const TextStyle(fontSize: 30),
+
+                          // ignore: prefer_const_constructors
+                        ),
+                        child: state is LoginLoading
+                            ? const CircularProgressIndicator()
+                            : const Text('Iniciar sesión')),
                   ),
                 ],
               ));
