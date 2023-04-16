@@ -1,7 +1,9 @@
 //construye el main
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tasks/cubit/home_task_page_cubit.dart';
 import 'package:tasks/repositories/login_repository.dart';
+import 'package:tasks/screens/home_task_screen.dart';
 import 'package:tasks/screens/login_screen.dart';
 
 import 'api/api_client.dart';
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
   final LoginRepository loginRepository;
 
   const MyApp({super.key, required this.loginRepository});
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,9 +33,13 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => BlocProvider(
               create: (context) => LoginCubit(loginRepository: loginRepository),
-              child: LoginScreen(),
+              child: const LoginScreen(),
             ),
         // Aquí irían el resto de las rutas de navegación de tu aplicación
+        '/homeTaskPage': (context) => BlocProvider(
+              create: (context) => HomeTaskPageCubit(),
+              child: const HomeTaskScreen(),
+            ),
       },
     );
   }
