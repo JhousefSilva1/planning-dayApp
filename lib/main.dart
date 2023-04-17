@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          LoginPage(),
+          LoginScreen(),
         ],
       ),
     );

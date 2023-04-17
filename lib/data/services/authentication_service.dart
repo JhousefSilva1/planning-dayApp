@@ -14,16 +14,21 @@ class AuthenticationService {
     final response = await http.post(
       Uri.parse(
           '$baseUrl/login'), //build instance class Uri, and that represent the url of http request "$baseUrl" = representa la url del backend, "/login"= es el endpoint
-      headers: {
+       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin':
-            '*', // añade el encabezado necesario para CORS
+         '*', // añade el encabezado necesario para CORS
+
+
       }, //se establish data in json
       body: jsonEncode({
         'username': username,
         'password': password
       }), // establish that the body  has username and password
     );
+
+    
+    
     if (response.statusCode == 200) {
       /// ask if the http response is 200 code
       final data = jsonDecode(response
