@@ -17,12 +17,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Material(
-      child: Stack(
-        children: [
-          
-        ],
-      )
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Gestion de Tareas'),
+      ),
     );
   }
 }
