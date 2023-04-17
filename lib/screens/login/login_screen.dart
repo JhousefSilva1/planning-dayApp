@@ -15,6 +15,7 @@ class LoginScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   late String _username = '';
   late String _password = '';
+  late String hexColorFont = 'ffcc00';
 
   LoginScreen({super.key});
 
@@ -24,8 +25,17 @@ class LoginScreen extends StatelessWidget {
       create: (_) => AuthenticationCubit(AuthenticationService()),
       child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
         builder: (context, state) {
-          return Material(
-            child: Stack(
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Color(0xFF004070),
+              title: Text('Task Managment',
+                  style: TextStyle(
+                    color: Color(0xffffcc00),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
+            body: ListView(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -75,6 +85,7 @@ class LoginScreen extends StatelessWidget {
                             color: const Color.fromARGB(255, 15, 200, 235),
                           ),
                           child: TextFormField(
+                            obscureText: true,
                             decoration: const InputDecoration(
                               hintText: 'Password',
                               border: InputBorder.none,
