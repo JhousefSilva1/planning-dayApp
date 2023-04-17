@@ -7,14 +7,18 @@ import 'package:http/http.dart'
 
 class AuthenticationService {
   final baseUrl =
-      'https://backend-sprint.com/api'; // we're setting de url backend
+      'http://localhost:9999/api/v1/auth'; // we're setting de url backend
 
   Future<String> logIn(
       {required String username, required String password}) async {
     final response = await http.post(
       Uri.parse(
           '$baseUrl/login'), //build instance class Uri, and that represent the url of http request "$baseUrl" = representa la url del backend, "/login"= es el endpoint
-      headers: {'Content-Type': 'application/json'}, //se establish data in json
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin':
+            '*', // añade el encabezado necesario para CORS
+      }, //se establish data in json
       body: jsonEncode({
         'username': username,
         'password': password
