@@ -1,4 +1,4 @@
-import 'dart:js';
+// ignore: avoid_web_libraries_in_flutter
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,18 +25,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       if (authenticated == 'authenticated') {
         emit(AuthenticationSuccess());
 
-        AlertDialog(
-          title: const Text('Login Successful'),
-          content: const Text('You have successfully logged in.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context as BuildContext).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
+
       } else {
         emit(AuthenticationFailure());
       }

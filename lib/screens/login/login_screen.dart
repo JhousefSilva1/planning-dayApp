@@ -1,3 +1,6 @@
+// ignore_for_file: avoid_print
+
+// ignore: unnecessary_import
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -11,7 +14,7 @@ import '../../cubit/authentication/authentication_state.dart';
 class LoginScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   late String _username = '';
-  final String _password = '';
+  late String _password = '';
 
   LoginScreen({super.key});
 
@@ -83,6 +86,9 @@ class LoginScreen extends StatelessWidget {
                               }
                               return null;
                             },
+                            onChanged: (value) {
+                              _password = value;
+                            },
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -109,7 +115,51 @@ class LoginScreen extends StatelessWidget {
                                             .logIn /*autenticar*/ (
                                                 username: _username,
                                                 password: _password);
-                                    print(authenticated);
+                                    print("data: $authenticated");
+                                    if (authenticated == '0001') {
+                                      //alertDialog
+                                      // ignore: use_build_context_synchronously
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text("Error"),
+                                            content: const Text(
+                                                "Usuario o contraseña incorrectos"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text("OK"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      //alertDialog
+                                      // ignore: use_build_context_synchronously
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text("Bienvenido"),
+                                            content: const Text(
+                                                "Usuario autenticado"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pushNamed(
+                                                      context, '/task_panel');
+                                                },
+                                                child: const Text("OK"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
                                   }
                                 },
                                 child: const Text(
