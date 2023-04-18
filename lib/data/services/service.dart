@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, dead_code
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -11,7 +13,7 @@ import '../../cubit/authentication/authentication_state.dart';
 class Service {
   //String apiSecretKeyKeycloak = keyGlobal.KeyGlobal().apiSecretKeyKeycloak();
   String apiUrl = 'http://localhost:9999/api/v1/auth';
-  final _storage = FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
   //var messages = message.Messages();
   var headerJson = <String, String>{
     'Accept': 'application/json',
@@ -92,7 +94,7 @@ class Service {
     var header;
     headerAccess == 0
         ? header = await headerAccessToken()
-        : header == headerJson;
+        : header = headerJson;
     // ? header = headerJson
     // : headerAccess == messages.headerKeyCloak()
     //     ? header = await headerKeyCloak()
@@ -104,13 +106,14 @@ class Service {
             await http.post(Uri.parse(url), headers: header, body: body);
         return resp;
       } on TimeoutException catch (e) {
-        print(e);
+        //return e;
 
         return AuthenticationServerFailure;
       } on SocketException catch (e) {
-        print(e);
+        //return e;
 
-        return AuthenticationServerFailure;
+        // return AuthenticationServerFailure;
+        return 'serverFailure';
       } catch (e) {
         throw const SocketException.closed();
       }
@@ -123,21 +126,21 @@ class Service {
     var header;
     headerAccess == 0
         ? header = await headerAccessToken()
-        : header == headerJson;
+        : header = headerJson;
     final verifyInternetGoogle = await verifyInternet();
     if (verifyInternetGoogle == true) {
       try {
         final resp = await http.get(Uri.parse(url), headers: header);
         return resp;
       } on TimeoutException catch (e) {
-        print(e);
+        return e;
         return AuthenticationServerFailure;
       } on SocketException catch (e) {
-        print(e);
+        return e;
         return AuthenticationServerFailure;
       } catch (e) {
-        print(e);
-        throw SocketException.closed();
+        return e;
+        throw const SocketException.closed();
       }
     } else {
       return AuthenticationServerFailure;
@@ -146,9 +149,9 @@ class Service {
 
   Future putHttp(String url, body, int headerAccess) async {
     var header;
-   headerAccess == 0
+    headerAccess == 0
         ? header = await headerAccessToken()
-        : header == headerJson;
+        : header = headerJson;
     final verifyInternetGoogle = await verifyInternet();
     if (verifyInternetGoogle == true) {
       try {
@@ -156,14 +159,14 @@ class Service {
             await http.put(Uri.parse(url), headers: header, body: body);
         return resp;
       } on TimeoutException catch (e) {
-        print(e);
+        return e;
         return AuthenticationServerFailure;
       } on SocketException catch (e) {
-        print(e);
+        return e;
         return AuthenticationServerFailure;
       } catch (e) {
-        print(e);
-        throw SocketException.closed();
+        return e;
+        throw const SocketException.closed();
       }
     } else {
       return AuthenticationServerFailure;
@@ -202,7 +205,7 @@ class Service {
     }
   }
 */
-  
+
   Future secureStorage(decodedData, jwtToken) async {
     // final accessToken = decodedData.accessToken;
     // final refreshToken = decodedData.refreshToken;
@@ -239,7 +242,6 @@ class Service {
     }
     return payloadMap;
   }
-
 
   String _decodeBase64(String str) {
     String output = str.replaceAll('-', '+').replaceAll('_', '/');

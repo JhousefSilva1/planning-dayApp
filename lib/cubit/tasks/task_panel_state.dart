@@ -1,4 +1,4 @@
-import 'package:intl/message_format.dart';
+// ignore: unused_import
 import 'package:equatable/equatable.dart';
 
 abstract class TaskPanelState {}

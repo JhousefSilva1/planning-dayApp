@@ -1,11 +1,13 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:convert'; //this library convert datos to jason
+// ignore: unused_import
 import 'package:connectivity_plus/connectivity_plus.dart';
+// ignore: unused_import
 import 'package:http/http.dart' as http;
 import 'package:tasks/data/services/service.dart';
 
-import '../../cubit/authentication/authentication_state.dart'; //using library http to make request http "GET, POST, PUT, DELETE"
+//using library http to make request http "GET, POST, PUT, DELETE"
 
 class AuthenticationService {
   final baseUrl =
@@ -35,36 +37,68 @@ class AuthenticationService {
     //   }), // establish that the body  has username and password
     // );
 
-    if (response is AuthenticationFailure ||
-        response is AuthenticationServerFailure ||
-        response is AuthenticationTokenExpire) {
-      return response.toString();
-    } else if (response.statusCode == 200) {
-      final data = jsonDecode(response
-          .body); // Decode http response that recive of server from Json to Dart
+    // if (response is AuthenticationFailure  ) {
+    //   return response.toString();
+    // } else if (response.statusCode == 200) {
+    //   final data = jsonDecode(response
+    //       .body); // Decode http response that recive of server from Json to Dart
 
-      if (data['code'] == '0000') {
-        // ignore: unused_local_variable
-        final token = data['response'][
-            'authToken']; //extract token value from http authentication response
-        //return token; //retrun token value
-        // ignore: unused_local_variable
-        var jwtToken = _services.parseJwtPayLoad(token);
-        // ignore: await_only_futures
-        //await _services.secureStorage(decodedData, jwtToken);
-  
-        return '0000';
-      } else {
-        //final error = data['response']['message'];
-        return '0001';
-      }
-    } else if (response.statusCode == 400) {
-      return '0001';
-    } else if (response.statusCode == 500) {
+    //   if (data['code'] == '0000') {
+    //     // ignore: unused_local_variable
+    //     final token = data['response'][
+    //         'authToken']; //extract token value from http authentication response
+    //     //return token; //retrun token value
+    //     // ignore: unused_local_variable
+    //     var jwtToken = _services.parseJwtPayLoad(token);
+    //     // ignore: await_only_futures
+    //     //await _services.secureStorage(decodedData, jwtToken);
+
+    //     return '0000';
+    //   } else {
+    //     //final error = data['response']['message'];
+    //     return '0001';
+    //   }
+    // } else if (response.statusCode == 400) {
+    //   return '0001';
+    // } else if (response.statusCode == 500) {
+    //   return '0001';
+    // } else {
+    //   return '0001';
+    // }
+
+    if (response.statusCode == 500) {
+      return response.toString();
+    } else if (response is String) {
       return '0001';
     } else {
-      return '0001';
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response
+            .body); // Decode http response that recive of server from Json to Dart
+
+        if (data['code'] == '0000') {
+          // ignore: unused_local_variable
+          final token = data['response'][
+              'authToken']; //extract token value from http authentication response
+          //return token; //retrun token value
+          // ignore: unused_local_variable
+          var jwtToken = _services.parseJwtPayLoad(token);
+          // ignore: await_only_futures
+          //await _services.secureStorage(decodedData, jwtToken);
+
+          return '0000';
+        } else {
+          //final error = data['response']['message'];
+          return '0001';
+        }
+      } else if (response.statusCode == 400) {
+        return '0001';
+      } else if (response.statusCode == 500) {
+        return '0001';
+      } else {
+        return '0001';
+      }
     }
+
     // if (response.statusCode == 200) {
     //   /// ask if the http response is 200 code
     //   final data = jsonDecode(response

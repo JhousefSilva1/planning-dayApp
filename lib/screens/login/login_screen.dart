@@ -44,7 +44,7 @@ class LoginScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 80),
+                        const SizedBox(height: 80),
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -120,6 +120,7 @@ class LoginScreen extends StatelessWidget {
                                     _formKey.currentState!.save();
                                     // Aquí puede agregar la lógica de autenticación.
                                     AuthenticationService
+                                        // ignore: no_leading_underscores_for_local_identifiers
                                         _authenticationService =
                                         AuthenticationService();
                                     String authenticated /*autenticado*/ =

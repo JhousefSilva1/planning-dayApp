@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: non_constant_identifier_names, duplicate_ignore
+
 import 'task_panel_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/services/task_panel_service.dart';
@@ -8,6 +9,7 @@ class TaskPanelCubit extends Cubit<TaskPanelState> {
 
   TaskPanelCubit(this._taskPanelService) : super(TeskPanelInitial());
 
+  // ignore: non_constant_identifier_names
   Future<void> AddTask(
       {required String Titlle,
       required String SubTile,
