@@ -27,8 +27,8 @@ class LoginScreen extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: Color(0xFF004070),
-              title: Text('Task Managment',
+              backgroundColor: const Color(0xFF004070),
+              title: const Text('Task Managment',
                   style: TextStyle(
                     color: Color(0xffffcc00),
                     fontSize: 20,
@@ -44,6 +44,7 @@ class LoginScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        SizedBox(height: 80),
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -55,7 +56,7 @@ class LoginScreen extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 50),
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -69,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
+                                return 'Please enter the username';
                               }
                               return null;
                             },
@@ -93,7 +94,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
+                                return 'Please enter the password';
                               }
                               return null;
                             },
@@ -102,7 +103,7 @@ class LoginScreen extends StatelessWidget {
                             },
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 40),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

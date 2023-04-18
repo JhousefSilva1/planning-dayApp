@@ -42,6 +42,8 @@ dependencies:
   date_time_picker: ^2.1.0
   http: ^0.13.5
   equatable: ^2.0.5
+  connectivity_plus: ^3.0.4
+  flutter_secure_storage: ^8.0.0
  
 
 dev_dependencies:

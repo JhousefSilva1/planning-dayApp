@@ -6,6 +6,12 @@ class AuthenticationSuccess extends AuthenticationState {}
 
 class AuthenticationFailure extends AuthenticationState {}
 
+class AuthenticationServerFailure extends AuthenticationState
+    implements Exception {}
+
+class AuthenticationTokenExpire extends AuthenticationState
+    implements Exception {}
+
 abstract class AuthenticationEvent {}
 
 class AuthenticationStarted extends AuthenticationEvent {}
