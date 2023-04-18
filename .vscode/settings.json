@@ -1,3 +1,7 @@
 {
-    "cmake.sourceDirectory": "${workspaceFolder}/windows/runner"
+    "cmake.sourceDirectory": "${workspaceFolder}/windows/runner",
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "yaml.schemas": {
+        "https://json.schemastore.org/pubspec.json": "file:///home/jhousefsilva/Projects1-2023/ingSoftware/appTasks/tasks/pubspec.yaml"
+    }
 }
