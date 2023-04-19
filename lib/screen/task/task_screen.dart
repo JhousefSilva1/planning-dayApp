@@ -5,7 +5,6 @@ import '../../cubit/task/task_cubit.dart';
 import '../../cubit/task/task_state.dart';
 import '../../data/service/task_service.dart';
 
-
 class TaskPanel extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
@@ -32,7 +31,7 @@ class TaskPanel extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: Form(
                       key: _formKey,
-                      child: Column(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(

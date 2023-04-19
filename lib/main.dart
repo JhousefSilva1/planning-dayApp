@@ -48,9 +48,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/login',
+      initialRoute: '/task_panel',
       routes: {
-        '/login': (context) => LoginScreen(),
+        //'/login': (context) => LoginScreen(),
         '/task_panel': (context) => TaskPanel(),
       },
     );

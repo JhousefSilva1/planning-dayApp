@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +14,9 @@ class TaskCubit extends Cubit<TaskState> {
 
   Future<void> AddTask(
       {required String Titlle,
+      // ignore: non_constant_identifier_names
       required String SubTile,
+      // ignore: non_constant_identifier_names
       required String Description,
       required String Date,
       required String Time,
