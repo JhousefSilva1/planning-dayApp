@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Color(0xFF004070),
-              title: const Text('Task Managment',
+              title: Text('Task Managment',
                   style: TextStyle(
                     color: Color(0xffffcc00),
                     fontSize: 20,

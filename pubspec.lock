@@ -8,15 +8,7 @@ packages:
       sha256: bfe67ef28df125b7dddcea62755991f807aa39a2492a23e1550161692950bbe0
       url: "https://pub.dev"
     source: hosted
-    version: "2.10.0"
-  bloc:
-    dependency: transitive
-    description:
-      name: bloc
-      sha256: "6f1b87b6eca9041d5672b6e29273cd1594db48ebb66fd2471066e9f3c3a516bd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.2.1"
+    version: "2.11.0"
   boolean_selector:
     dependency: transitive
     description:
