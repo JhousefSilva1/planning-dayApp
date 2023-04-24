@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers, prefer_const_constructors
 
 // ignore: unnecessary_import
 import 'dart:ui';

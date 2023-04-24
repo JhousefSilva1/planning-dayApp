@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, avoid_print, prefer_typing_uninitialized_variables
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';

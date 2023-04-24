@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, unused_import
 
 import 'dart:convert'; //this library convert datos to jason
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -58,6 +58,9 @@ class AuthService {
         //final error = data['response']['message'];
         return '0001';
       }
+      // } else {
+      //   return response.statusCode.toString();
+      // }
     } else if (response.statusCode == 400) {
       return '0001';
     } else if (response.statusCode == 500) {
