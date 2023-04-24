@@ -23,14 +23,17 @@ class TaskPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
+        //BOTON DE ATRAS, NO VISIBLE
+
         create: (_) => TaskCubit(TaskService()),
         child: BlocBuilder<TaskCubit, TaskState>(
           builder: (context, state) {
             return Scaffold(
               appBar: AppBar(
+                automaticallyImplyLeading: false,
                 backgroundColor: const Color(0xFF004070),
                 title: const Text(
-                  'Tareas',
+                  'Task Managment',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -72,10 +75,27 @@ class TaskPanel extends StatelessWidget {
                     cancelBtnText: 'Cancelar',
                     widget: Column(
                       children: [
+                        const SizedBox(height: 20),
+                        const Text(
+                          '¿Desea guardar la tarea?',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
                         TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          textInputAction: TextInputAction.newline,
                           decoration: const InputDecoration(
                             label: Text('Tittulo de la Tarea'),
                             hintText: 'Ingrese el titulo de la tarea',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -84,10 +104,18 @@ class TaskPanel extends StatelessWidget {
                             return null;
                           },
                         ),
+                        const SizedBox(height: 20),
                         TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
                           decoration: const InputDecoration(
                             label: Text('Ingrese el subtitulo de la tarea'),
                             hintText: 'Ingrese el titulo de la tarea',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -96,11 +124,20 @@ class TaskPanel extends StatelessWidget {
                             return null;
                           },
                         ),
+                        const SizedBox(height: 20),
                         //tenxt descrpcion
                         TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          textInputAction: TextInputAction.newline,
                           decoration: const InputDecoration(
                             label: Text('Ingrese la descripcion de la tarea'),
                             hintText: 'Ingrese el titulo de la tarea',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -109,12 +146,21 @@ class TaskPanel extends StatelessWidget {
                             return null;
                           },
                         ),
+                        const SizedBox(height: 20),
                         //fecha y hora
                         TextFormField(
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            textInputAction: TextInputAction.newline,
                             controller: _dateController,
                             decoration: const InputDecoration(
                               labelText: 'Fecha',
                               hintText: 'Ingrese la fecha de la tarea',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
                               prefixIcon: Icon(Icons.calendar_today),
                             ),
                             onTap: () async {
@@ -147,6 +193,36 @@ class TaskPanel extends StatelessWidget {
                               }
                               return null;
                             }),
+                        const SizedBox(height: 20),
+
+                        //Un DropWown Con opciones para seleccionar
+                        DropdownButtonFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Estado',
+                            hintText: 'Ingrese el estado de la tarea',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                          ),
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text('Pendiente'),
+                              value: 'Pendiente',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('En Proceso'),
+                              value: 'En Proceso',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('Finalizado'),
+                              value: 'Finalizado',
+                            ),
+                          ],
+                          onChanged: (value) {},
+                          validator: (value) {},
+                        ),
                       ],
                     ),
                   );
