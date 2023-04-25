@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, avoid_unnecessary_containers, unused_import
+// ignore_for_file: unused_local_variable, avoid_unnecessary_containers, unused_import, unused_field
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,14 +10,23 @@ import '../../data/service/task_service.dart';
 import 'package:quickalert/quickalert.dart';
 // Importamos el Cubit que maneja el estado de las tareas.
 
+// ignore: must_be_immutable
 class TaskPanel extends StatelessWidget {
   late Task task;
 
   //controllres
-  final _dateController = TextEditingController();
 
+  final _titleController = TextEditingController();
+  final _subtitleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _dateController = TextEditingController();
+  final _tagsController = TextEditingController();
+  final _statusController = TextEditingController();
+  String? _selectTag;
   final _formKey = GlobalKey<FormState>();
 
+
+  
   TaskPanel({super.key});
 
   @override
@@ -30,6 +39,16 @@ class TaskPanel extends StatelessWidget {
           builder: (context, state) {
             return Scaffold(
               appBar: AppBar(
+                //boton de logout
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      // ignore: avoid_print
+                      print('Logout');
+                    },
+                    icon: const Icon(Icons.logout),
+                  ),
+                ],
                 automaticallyImplyLeading: false,
                 backgroundColor: const Color(0xFF004070),
                 title: const Text(
@@ -41,14 +60,15 @@ class TaskPanel extends StatelessWidget {
                   ),
                 ),
               ),
+            
               body: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ListView(
-                  children: const [
-                    //Floating button a pir de pantalla
-                  ],
+                  
                 ),
               ),
+
+            
               floatingActionButton: FloatingActionButton(
                 onPressed: (
                     //dos opciones, Guardar y cancelar
@@ -65,19 +85,19 @@ class TaskPanel extends StatelessWidget {
                       //salir del dialog
                       Navigator.of(context).pop();
                     },
-                    confirmBtnText: 'Guardar',
+                    confirmBtnText: 'Save',
                     onCancelBtnTap: () {
                       // ignore: avoid_print
                       print('Cancel button tapped');
                       //salir del dialog
                       Navigator.of(context).pop();
                     },
-                    cancelBtnText: 'Cancelar',
+                    cancelBtnText: 'Cancel',
                     widget: Column(
                       children: [
                         const SizedBox(height: 20),
                         const Text(
-                          '¿Desea guardar la tarea?',
+                          'Are you agree to save the Task?',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -85,12 +105,13 @@ class TaskPanel extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         TextFormField(
+                          controller: _titleController,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           textInputAction: TextInputAction.newline,
                           decoration: const InputDecoration(
-                            label: Text('Tittulo de la Tarea'),
-                            hintText: 'Ingrese el titulo de la tarea',
+                            label: Text('Task Title'),
+                            hintText: 'Enter a Task Title',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(20),
@@ -99,18 +120,19 @@ class TaskPanel extends StatelessWidget {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Por favor ingrese el titulo de la tarea';
+                              return 'Plase, you have to enter a task title';
                             }
                             return null;
                           },
                         ),
                         const SizedBox(height: 20),
                         TextFormField(
+                          controller: _subtitleController,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           decoration: const InputDecoration(
-                            label: Text('Ingrese el subtitulo de la tarea'),
-                            hintText: 'Ingrese el titulo de la tarea',
+                            label: Text('Task Subtitle`'),
+                            hintText: 'Enter a Task Subtitle',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(20),
@@ -119,7 +141,7 @@ class TaskPanel extends StatelessWidget {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Por favor ingrese el titulo de la tarea';
+                              return 'Please, you have to enter a Subtitle Task';
                             }
                             return null;
                           },
@@ -127,12 +149,13 @@ class TaskPanel extends StatelessWidget {
                         const SizedBox(height: 20),
                         //tenxt descrpcion
                         TextFormField(
+                          controller: _descriptionController,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           textInputAction: TextInputAction.newline,
                           decoration: const InputDecoration(
-                            label: Text('Ingrese la descripcion de la tarea'),
-                            hintText: 'Ingrese el titulo de la tarea',
+                            label: Text('Description of task'),
+                            hintText: 'Enter a Description of task',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(20),
@@ -141,7 +164,7 @@ class TaskPanel extends StatelessWidget {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Por favor ingrese el titulo de la tarea';
+                              return 'Please, you have to enter a Description!';
                             }
                             return null;
                           },
@@ -149,13 +172,13 @@ class TaskPanel extends StatelessWidget {
                         const SizedBox(height: 20),
                         //fecha y hora
                         TextFormField(
+                          controller: _dateController,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
                             textInputAction: TextInputAction.newline,
-                            controller: _dateController,
                             decoration: const InputDecoration(
-                              labelText: 'Fecha',
-                              hintText: 'Ingrese la fecha de la tarea',
+                              labelText: 'Date',
+                              hintText: 'Select a Due Date',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(20),
@@ -189,7 +212,7 @@ class TaskPanel extends StatelessWidget {
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Por favor ingrese la fecha de la tarea';
+                                return 'Please, Enter a Due date for tha task';
                               }
                               return null;
                             }),
@@ -197,9 +220,11 @@ class TaskPanel extends StatelessWidget {
 
                         //Un DropWown Con opciones para seleccionar
                         DropdownButtonFormField(
+                          
+                          value: _selectTag,
                           decoration: const InputDecoration(
-                            labelText: 'Estado',
-                            hintText: 'Ingrese el estado de la tarea',
+                            labelText: 'Select a Tag',
+                            hintText: 'Introduce a tag',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(20),
@@ -208,20 +233,31 @@ class TaskPanel extends StatelessWidget {
                           ),
                           items: const [
                             DropdownMenuItem(
-                              child: Text('Pendiente'),
-                              value: 'Pendiente',
+                              value: 'Work',
+                              child: Text('Work'),
                             ),
                             DropdownMenuItem(
-                              child: Text('En Proceso'),
-                              value: 'En Proceso',
+                              value: 'Home',
+                              child: Text('Home'),
                             ),
                             DropdownMenuItem(
-                              child: Text('Finalizado'),
-                              value: 'Finalizado',
+                              value: 'School',
+                              child: Text('School'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Personal',
+                              child: Text('Personal'),
+                            ),
+                            //option to create a new
+                            DropdownMenuItem(
+                              value: 'Create a new',
+                              child: Text('Create a new'),
                             ),
                           ],
                           onChanged: (value) {},
-                          validator: (value) {},
+                          validator: (value) {
+                            return null;
+                          },
                         ),
                       ],
                     ),

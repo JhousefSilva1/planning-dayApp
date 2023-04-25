@@ -6,7 +6,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 import '../../cubit/auth/auth_cubit.dart';
 import '../../cubit/auth/auth_state.dart';
 
@@ -49,24 +48,29 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(height: 80),
                         Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: const Color.fromARGB(255, 15, 200, 235),
+                            borderRadius: BorderRadius.circular(1000),
+                            color: Color(0xFF004070),
                           ),
                           child: const Icon(
                             Icons.account_circle,
-                            size: 100,
-                            color: Colors.white,
+                            size: 300,
+                            color: const Color(0xffffcc00),
                           ),
                         ),
                         const SizedBox(height: 50),
                         Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: const Color.fromARGB(255, 15, 200, 235),
-                          ),
+                              borderRadius: BorderRadius.circular(20),
+                              color: const Color(0xFF004070)),
                           child: TextFormField(
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                             decoration: const InputDecoration(
                               hintText: 'Username',
+                              hintStyle: TextStyle(
+                                color: Color.fromARGB(255, 124, 119, 119),
+                              ),
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.all(20),
                             ),
@@ -85,12 +89,18 @@ class LoginScreen extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: const Color.fromARGB(255, 15, 200, 235),
+                            color: const Color(0xFF004070),
                           ),
                           child: TextFormField(
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                             obscureText: true,
                             decoration: const InputDecoration(
                               hintText: 'Password',
+                              hintStyle: TextStyle(
+                                color: Color.fromARGB(255, 124, 119, 119),
+                              ),
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.all(20),
                             ),
@@ -114,15 +124,18 @@ class LoginScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 //boton mas grande
 
-                                color: const Color.fromARGB(255, 15, 200, 235),
+                                color: const Color(0xFF004070),
                               ),
                               child: TextButton(
+                                style: ButtonStyle(
+                                  padding: MaterialStateProperty.all(
+                                      const EdgeInsets.all(25)),
+                                ),
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
                                     _formKey.currentState!.save();
                                     // Aquí puede agregar la lógica de autenticación.
-                                    AuthService
-                                        _authenticationService =
+                                    AuthService _authenticationService =
                                         AuthService();
                                     String authenticated /*autenticado*/ =
                                         await _authenticationService
@@ -180,7 +193,7 @@ class LoginScreen extends StatelessWidget {
                                   'Log In',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 25,
 
                                     //fontfamily
                                   ),
@@ -195,9 +208,13 @@ class LoginScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 //boton mas grande
 
-                                color: const Color.fromARGB(255, 15, 200, 235),
+                                color: const Color(0xFF004070),
                               ),
                               child: TextButton(
+                                style: ButtonStyle(
+                                  padding: MaterialStateProperty.all(
+                                      const EdgeInsets.all(25)),
+                                ),
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
                                     context.read<AuthCubit>().logIn(
@@ -210,7 +227,7 @@ class LoginScreen extends StatelessWidget {
                                   'Sign Up',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 25,
                                     //fontfamily
                                   ),
                                 ),

@@ -75,3 +75,27 @@ class TaskLoadSuccess extends TaskState {
 }
 
 class TaskInitial extends TaskState {}
+
+class TaskFailure extends TaskState {}
+
+class TaskCreateSuccess extends TaskState {}
+
+class TaskFailCreate extends TaskState {}
+
+class TaskView extends TaskState {}
+
+class TaskServerFailure extends TaskState implements Exception {}
+
+class TaskTokenExpire extends TaskState implements Exception {}
+
+class TaskLoading extends TaskState {}
+
+class TaskLoaded extends TaskState {
+  @override
+  // ignore: overridden_fields
+  final List<Task> tasks;
+
+  TaskLoaded(this.tasks);
+}
+
+class TaskError extends TaskState {}

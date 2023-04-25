@@ -31,55 +31,6 @@ class Service {
     };
   }
 
-  // headerKeyCloak() async {
-  //   var bytes = utf8.encode('web:' + apiSecretKeyKeycloak);
-  //   var base64Str = base64.encode(bytes).toString();
-  //   return <String, String>{
-  //     'Content-Type': 'application/x-www-form-urlencoded',
-  //     'Authorization': 'Basic $base64Str'
-  //   };
-  // }
-
-  // Future refreshToken() async {
-  //   String url =
-  //       '$apiUrlKeycloak/auth/realms/master/protocol/openid-connect/token';
-  //   String refreshToken = await _storage.read(key: 'refreshToken');
-  //   var header = await headerKeyCloak();
-  //   var body = <String, String>{
-  //     'grant_type': 'refresh_token',
-  //     'refresh_token': refreshToken,
-  //   };
-  //   final verifyInternetGoogle = await verifyInternet('google.com');
-  //   if (verifyInternetGoogle == true) {
-  //     try {
-  //       final resp =
-  //           await http.post(Uri.parse(url), headers: header, body: body);
-  //       return resp;
-  //     } on TimeoutException catch (e) {
-  //       print(e);
-  //       return messages.checkServer();
-  //     } on SocketException catch (e) {
-  //       print(e);
-  //       return messages.checkServer();
-  //     } catch (e) {
-  //       print(e);
-  //       return messages.refreshToken();
-  //     }
-  //   } else {
-  //     return messages.checkInternet();
-  //   }
-  // }
-
-  // Future verifyInternet(String url) async {
-
-  //   try {
-  //     final result = await InternetAddress.lookup(url);
-  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) return true;
-  //   } catch (e) {
-  //     print(e);
-  //     return false;
-  //   }
-  // }
 
   Future<bool> verifyInternet() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -96,10 +47,7 @@ class Service {
     headerAccess == 0
         ? header = await headerAccessToken()
         : header = headerJson;
-    // ? header = headerJson
-    // : headerAccess == messages.headerKeyCloak()
-    //     ? header = await headerKeyCloak()
-    //     : header = null;
+
     final verifyInternetGoogle = await verifyInternet();
     if (verifyInternetGoogle == true) {
       try {
@@ -173,60 +121,29 @@ class Service {
     }
   }
 
-/*
-  Future uploadSingleFile(file, url, formData) async {
-    var dio = Dio();
-    var header = await headerAccessToken();
+  Future deleteHttp(String url, int headerAccess) async {
+    var header;
+    headerAccess == 0
+        ? header = await headerAccessToken()
+        : header = headerJson;
     final verifyInternetGoogle = await verifyInternet();
     if (verifyInternetGoogle == true) {
       try {
-        dio.options.headers = header;
-        dio.options.followRedirects = false;
-        dio.options.validateStatus = (status) {
-          return status < 500;
-        };
-        final resp = await dio.post(url, data: formData);
+        final resp = await http.delete(Uri.parse(url), headers: header);
         return resp;
       } on TimeoutException catch (e) {
         print(e);
-        return messages.checkServer();
+        return AuthServerFailure;
       } on SocketException catch (e) {
         print(e);
-        return messages.checkServer();
+        return AuthServerFailure;
       } catch (e) {
-        if (e.error == 'Http status error [401]') {
-          return messages.refreshToken();
-        } else {
-          throw SocketException.closed();
-        }
+        print(e);
+        throw SocketException.closed();
       }
     } else {
-      return messages.checkInternet();
+      return AuthServerFailure;
     }
-  }
-*/
-
-  Future secureStorage(decodedData, jwtToken) async {
-    // final accessToken = decodedData.accessToken;
-    // final refreshToken = decodedData.refreshToken;
-    // const String accessTokenKey = 'accessToken';
-    // final String accessTokenValue = accessToken;
-    // const String refreshTokenKey = 'refreshToken';
-    // final String refreshTokenValue = refreshToken;
-    // const String firstNameKey = 'firstName';
-    // final String firstNameValue = jwtToken['given_name'];
-    // const String firstLastNameKey = 'firstLastName';
-    // final String firstLastNameValue = jwtToken['family_name'];
-    // const String emailKey = 'email';
-    // final String emailValue = jwtToken['email'];
-    // const String photoKey = 'photo';
-    // const String photoValue = '';
-    // await _storage.write(key: accessTokenKey, value: accessTokenValue);
-    // await _storage.write(key: refreshTokenKey, value: refreshTokenValue);
-    // await _storage.write(key: firstNameKey, value: firstNameValue);
-    // await _storage.write(key: firstLastNameKey, value: firstLastNameValue);
-    // await _storage.write(key: emailKey, value: emailValue);
-    // await _storage.write(key: photoKey, value: photoValue);
   }
 
   Map<String, dynamic> parseJwtPayLoad(String token) {
