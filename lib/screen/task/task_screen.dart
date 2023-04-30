@@ -25,15 +25,11 @@ class TaskPanel extends StatelessWidget {
   String? _selectTag;
   final _formKey = GlobalKey<FormState>();
 
-
-  
   TaskPanel({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        //BOTON DE ATRAS, NO VISIBLE
-
         create: (_) => TaskCubit(TaskService()),
         child: BlocBuilder<TaskCubit, TaskState>(
           builder: (context, state) {
@@ -60,15 +56,10 @@ class TaskPanel extends StatelessWidget {
                   ),
                 ),
               ),
-            
               body: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: ListView(
-                  
-                ),
+                child: ListView(),
               ),
-
-            
               floatingActionButton: FloatingActionButton(
                 onPressed: (
                     //dos opciones, Guardar y cancelar
@@ -172,7 +163,7 @@ class TaskPanel extends StatelessWidget {
                         const SizedBox(height: 20),
                         //fecha y hora
                         TextFormField(
-                          controller: _dateController,
+                            controller: _dateController,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
                             textInputAction: TextInputAction.newline,
@@ -220,7 +211,6 @@ class TaskPanel extends StatelessWidget {
 
                         //Un DropWown Con opciones para seleccionar
                         DropdownButtonFormField(
-                          
                           value: _selectTag,
                           decoration: const InputDecoration(
                             labelText: 'Select a Tag',

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 //importar http
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:tasks/app/constants.dart';
@@ -11,6 +12,7 @@ import 'package:tasks/app/constants.dart';
 import '../../cubit/auth/auth_state.dart';
 
 class Service {
+  final _storage = FlutterSecureStorage();
   
   var headerJson = <String, String>{
     'Accept': 'application/json',
@@ -168,5 +170,19 @@ class Service {
         throw Exception('Illegal base64url string!"');
     }
     return utf8.decode(base64Url.decode(output));
+  }
+
+  Future secureStorage(decodedData, jwtToken) async{
+    final accessToken = decodedData['response']['authToken'];
+    final refreshToken = decodedData['response']['refreshToken'];
+    const String accessTokenKey = 'accessToken';
+    final String accessTokenValue = accessToken;
+    const String refreshTokenKey = 'refreshToken';
+    final String refreshTokenValue = refreshToken;
+    const String nameKey = 'name';
+    final String nameValue = jwtToken['name'];
+    await _storage.write(key: accessTokenKey, value: accessTokenValue);
+    await _storage.write(key: refreshTokenKey, value: refreshTokenValue);
+    await _storage.write(key: nameKey, value: nameValue);
   }
 }
