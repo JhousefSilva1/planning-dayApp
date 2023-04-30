@@ -47,80 +47,17 @@
 
 // ignore_for_file: implementation_imports, depend_on_referenced_packages
 
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:tasks/cubit/task/task_state.dart';
 
 import '../../data/data/task_list.dart';
 import '../../data/service/task_service.dart';
 
-part 'task_state.dart';
+// part 'task_state.dart';
 
 class TaskCubit extends Cubit<TaskState> {
   final TaskService _taskService;
 
-  TaskCubit(
-    this._taskService,
-  ) : super(TaskState.initial());
-
-  Future<void> fetchTasks() async {
-    try {
-      emit(state.copyWith(isLoading: true, errorMessage: '', tasks: []));
-      final tasks = await _taskService.fetchTasks();
-      emit(state.copyWith(tasks: tasks, isLoading: false, errorMessage: ''));
-    } catch (e) {
-      emit(state.copyWith(
-          isLoading: false, errorMessage: 'Failed to fetch tasks.', tasks: []));
-    }
-  }
-
-  Future<void> createTask(String id, String title, String subtitle,
-      String description, DateTime date, bool isDone, String tag) async {
-    try {
-      final newTask = Task(
-          id: id,
-          title: title,
-          subtitle: subtitle,
-          description: description,
-          date: DateTime.now(),
-          isDone: false,
-          tag: tag);
-      final createdTask = await _taskService.createTask(newTask as String);
-      final tasks = List.from(state.tasks)..add(createdTask);
-      emit(state.copyWith(
-        tasks: tasks,
-        errorMessage: '',
-        isLoading: null,
-      ));
-    } catch (e) {
-      emit(state.copyWith(
-          errorMessage: 'Failed to create task.', isLoading: false, tasks: []));
-    }
-  }
-
-  Future<void> updateTask(Task updatedTask) async {
-    try {
-      await _taskService.updateTask(updatedTask);
-      final tasks = state.tasks
-          .map((t) => t.id == updatedTask.id ? updatedTask : t)
-          .toList();
-      emit(state.copyWith(tasks: tasks, isLoading: null, errorMessage: ''));
-    } catch (e) {
-      emit(state.copyWith(
-          errorMessage: 'Failed to update task.', isLoading: null, tasks: []));
-    }
-  }
-
-  Future<void> deleteTask(Task taskToDelete) async {
-    try {
-      await _taskService.deleteTask(taskToDelete);
-      final tasks = state.tasks.where((t) => t.id != taskToDelete.id).toList();
-      emit(state.copyWith(tasks: tasks, isLoading: null, errorMessage: ''));
-    } catch (e) {
-      emit(state.copyWith(
-          errorMessage: 'Failed to delete task.', tasks: [], isLoading: null));
-    }
-  }
-
-
+  TaskCubit(this._taskService) : super(TaskInitial());
 }
