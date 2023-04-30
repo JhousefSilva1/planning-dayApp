@@ -1,10 +1,12 @@
-// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers, prefer_const_constructors
+// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers, prefer_const_constructors, unnecessary_const
 
 // ignore: unnecessary_import
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:tasks/app/constants.dart';
 
 import '../../cubit/auth/auth_cubit.dart';
 import '../../cubit/auth/auth_state.dart';
@@ -24,7 +26,74 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => AuthCubit(AuthService()),
-      child: BlocBuilder<AuthCubit, AuthState>(
+      child: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if(state is AuthInitial){
+
+          }else if(state is AuthInternetFailure){
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              text: Globals.checkInternet
+            );
+          }else if(state is AuthServerFailure){
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              text: Globals.checkServer
+            );
+          }else if(state is AuthCredentialsFailure){
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              text: 'Credenciales invalidas. Revise por favor.'
+            );
+          }else if(state is AuthSuccess){
+            Navigator.pushNamed(context, '/task_panel');
+          }else{
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              text: Globals.checkServer
+            );
+          }
+          // if (state is AuthFailure) {
+          //   showDialog(
+          //     context: context,
+          //     builder: (context) => AlertDialog(
+          //       title: Text('Error de inicio de sesión'),
+          //       content: Text( 'Ha ocurrido un error.'),
+          //       actions: [
+          //         TextButton(
+          //           onPressed: () {
+          //             // context.read<AuthCubit>().reset();
+          //             Navigator.pop(context);
+          //           },
+          //           child: Text('OK'),
+          //         ),
+          //       ],
+          //     ),
+          //   );
+          // } else if (state is AuthSuccess) {
+          //   showDialog(
+          //     context: context,
+          //     builder: (context) => AlertDialog(
+          //       title: Text('Inicio de sesión exitoso'),
+          //       content: Text('¡Bienvenido!'),
+          //       actions: [
+          //         TextButton(
+          //           onPressed: () {
+          //             // context.read<AuthCubit>().reset();
+          //             Navigator.pop(context);
+          //             // Redirigir al usuario a otra página
+          //           },
+          //           child: Text('OK'),
+          //         ),
+          //       ],
+          //     ),
+          //   );
+          // }
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -122,92 +191,6 @@ class LoginScreen extends StatelessWidget {
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                //boton mas grande
-
-                                color: const Color(0xFF004070),
-                              ),
-                              child: TextButton(
-                                style: ButtonStyle(
-                                  padding: MaterialStateProperty.all(
-                                      const EdgeInsets.all(25)),
-                                ),
-                                onPressed: () async {
-                                  if (_formKey.currentState!.validate()) {
-                                    _formKey.currentState!.save();
-                                    // Aquí puede agregar la lógica de autenticación.
-                                    AuthService _authenticationService =
-                                        AuthService();
-                                    String authenticated /*autenticado*/ =
-                                        await _authenticationService
-                                            .logIn /*autenticar*/ (
-                                                username: _username,
-                                                password: _password);
-                                    print("data: $authenticated");
-                                    if (authenticated == '0001') {
-                                      //alertDialog
-                                      // ignore: use_build_context_synchronously
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text("Error"),
-                                            content: const Text(
-                                                "Usuario o contraseña incorrectos"),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text("OK"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    } else {
-                                      //alertDialog
-                                      // ignore: use_build_context_synchronously
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text("Bienvenido"),
-                                            content: const Text(
-                                                "Usuario autenticado"),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pushNamed(
-                                                      context, '/task_panel');
-                                                },
-                                                child: const Text("OK"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    }
-                                  }
-                                },
-                                child: const Text(
-                                  'Log In',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25,
-
-                                    //fontfamily
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            //button signup
-                            const SizedBox(width: 30),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                //boton mas grande
-
                                 color: const Color(0xFF004070),
                               ),
                               child: TextButton(
@@ -224,11 +207,10 @@ class LoginScreen extends StatelessWidget {
                                   }
                                 },
                                 child: const Text(
-                                  'Sign Up',
+                                  'Log In',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 25,
-                                    //fontfamily
                                   ),
                                 ),
                               ),

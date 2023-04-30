@@ -6,15 +6,12 @@ import 'dart:io';
 //importar http
 import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
-//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:tasks/app/constants.dart';
 
 import '../../cubit/auth/auth_state.dart';
 
 class Service {
-  //String apiSecretKeyKeycloak = keyGlobal.KeyGlobal().apiSecretKeyKeycloak();
-  String apiUrl = 'http://localhost:9999/api/v1/auth';
-  //final _storage = FlutterSecureStorage();
-  //var messages = message.Messages();
+  
   var headerJson = <String, String>{
     'Accept': 'application/json',
     'Content-Type': 'application/json',
@@ -51,22 +48,19 @@ class Service {
     final verifyInternetGoogle = await verifyInternet();
     if (verifyInternetGoogle == true) {
       try {
-        final resp =
-            await http.post(Uri.parse(url), headers: header, body: body);
+        final resp = await http.post(Uri.parse(url), headers: header, body: body);
         return resp;
       } on TimeoutException catch (e) {
         print(e);
-
-        return AuthServerFailure;
+        return Globals.checkServer;
       } on SocketException catch (e) {
         print(e);
-
-        return AuthServerFailure;
+        return Globals.checkServer;
       } catch (e) {
-        throw const SocketException.closed();
+        return Globals.checkServer;
       }
     } else {
-      return AuthServerFailure;
+      return Globals.checkInternet;
     }
   }
 
@@ -82,16 +76,16 @@ class Service {
         return resp;
       } on TimeoutException catch (e) {
         print(e);
-        return AuthServerFailure;
+        return Globals.checkServer;
       } on SocketException catch (e) {
         print(e);
-        return AuthServerFailure;
+        return Globals.checkServer;
       } catch (e) {
         print(e);
-        throw SocketException.closed();
+        return Globals.checkServer;
       }
     } else {
-      return AuthServerFailure;
+      return Globals.checkInternet;
     }
   }
 
@@ -103,21 +97,20 @@ class Service {
     final verifyInternetGoogle = await verifyInternet();
     if (verifyInternetGoogle == true) {
       try {
-        final resp =
-            await http.put(Uri.parse(url), headers: header, body: body);
+        final resp = await http.put(Uri.parse(url), headers: header, body: body);
         return resp;
       } on TimeoutException catch (e) {
         print(e);
-        return AuthServerFailure;
+        return Globals.checkServer;
       } on SocketException catch (e) {
         print(e);
-        return AuthServerFailure;
+        return Globals.checkServer;
       } catch (e) {
         print(e);
-        throw SocketException.closed();
+        return Globals.checkServer;
       }
     } else {
-      return AuthServerFailure;
+      return Globals.checkInternet;
     }
   }
 
@@ -133,16 +126,16 @@ class Service {
         return resp;
       } on TimeoutException catch (e) {
         print(e);
-        return AuthServerFailure;
+        return Globals.checkServer;
       } on SocketException catch (e) {
         print(e);
-        return AuthServerFailure;
+        return Globals.checkServer;
       } catch (e) {
         print(e);
-        throw SocketException.closed();
+        return Globals.checkServer;
       }
     } else {
-      return AuthServerFailure;
+      return Globals.checkInternet;
     }
   }
 

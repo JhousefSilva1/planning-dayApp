@@ -6,9 +6,13 @@ class AuthSuccess extends AuthState {}
 
 class AuthFailure extends AuthState {}
 
-class AuthServerFailure extends AuthState implements Exception {}
+class AuthServerFailure extends AuthState {}
 
-class AuthTokenExpire extends AuthState implements Exception {}
+class AuthInternetFailure extends AuthState {}
+
+class AuthCredentialsFailure extends AuthState {}
+
+class AuthTokenExpire extends AuthState {}
 
 abstract class AuthEvent {}
 
