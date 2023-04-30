@@ -31,13 +31,11 @@ class AuthService {
 
         if (data['code'] == '0000') {
           // ignore: unused_local_variable
-          final token = data['response'][
-              'authToken']; //extract token value from http authentication response
-          //return token; //retrun token value
-          // ignore: unused_local_variable
+          final token = data['response']['authToken']; //extract token value from http authentication response
           var jwtToken = _services.parseJwtPayLoad(token);
-          // ignore: await_only_futures
-          //await _services.secureStorage(decodedData, jwtToken);
+          final decodedData = json.decode(response.body);
+          await _services.secureStorage(decodedData, jwtToken);
+          // await _services.secureStorage(decodedData, jwtToken);
 
           return '0000';
         } else {
