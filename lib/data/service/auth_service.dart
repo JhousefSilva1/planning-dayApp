@@ -9,12 +9,9 @@ import 'package:tasks/data/service/service.dart';
 import '../../cubit/auth/auth_state.dart'; //using library http to make request http "GET, POST, PUT, DELETE"
 
 class AuthService {
-  // final baseUrl = 'http://localhost:9999/api/v1/auth'; // we're setting de url backend
-
   final _services = Service();
-  Future<String> logIn(
-      {required String username, required String password}) async {
-    String url = '${Globals.apiUrl}/login';
+  Future<String> logIn({required String username, required String password}) async {
+    String url = '${Globals.apiUrl}/auth/login';
     var body = jsonEncode({
       'username': username,
       'password': password

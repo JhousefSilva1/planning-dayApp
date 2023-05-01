@@ -11,10 +11,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit(this._authenticationService) : super(AuthInitial());
 
-  //AuthenticationCubit() : super(AuthenticationInitial());
-
   Future<void> logIn({required String username, required String password}) async {
-    // emit(AuthStarted() as AuthState);
     emit(AuthInitial());
     try {
       String authenticated = await _authenticationService.logIn(

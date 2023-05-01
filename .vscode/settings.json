@@ -3,5 +3,6 @@
     "yaml.schemas": {
         "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/tasks": "file:///home/jhousefsilva/Projects1-2023/ingSoftware/appTasks/tasks/analysis_options.yaml",
         "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json": "file:///home/jhousefsilva/Projects1-2023/ingSoftware/appTasks/tasks/pubspec.yaml"
-    }
+    },
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

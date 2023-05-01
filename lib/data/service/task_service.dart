@@ -3,46 +3,107 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:tasks/app/constants.dart';
+import 'package:tasks/data/models/tasks.dart';
+import 'package:tasks/data/service/service.dart';
 
-import '../data/task_list.dart';
+import '../models/tasks.dart';
 
 
 class TaskService {
-  static const String _baseUrl = 'https://example.com/tasks';
+  final _services = Service();
 
-  Future<List> fetchTasks() async {
-    final response = await http.get(Uri.parse(_baseUrl));
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
-      return data.map((task) => Task.fromJson(task)).toList();
-    } else {
-      throw Exception('Failed to fetch tasks');
+  Future allTasks() async {
+    String url = '${Globals.apiUrl}/task';
+    final response = await _services.getHttp(url, 0);
+    if(response is String){
+      return response;        
+    }else{
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body); // Decode http response that recive of server from Json to Dart
+        if (data['code'] == '0000') {
+          final task = taskFromJson(jsonEncode(data['response']));
+          return task;
+        } else if (data['code'] == '0001'){
+          return '0001';
+        } else {
+          return Globals.checkInternet;
+        }
+      } else if (response.statusCode == 500) {
+        return Globals.checkServer;
+      } else {
+        return Globals.checkServer;
+      }
     }
   }
 
-  Future<Task> createTask(String description) async {
-    final response = await http.post(Uri.parse(_baseUrl), body: {'description': description});
-    if (response.statusCode == 201) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      return Task.fromJson(data);
-    } else {
-      throw Exception('Failed to create task');
+  Future createTask(Task task) async {
+    String url = '${Globals.apiUrl}/task';
+    var body = jsonEncode({
+      'description': task.description,
+      'date': "2019-03-03T00:00:00Z",
+      'labelIds': task.labelIds
+    });
+    final response = await _services.postHttp(url, body, 0);
+    if(response is String){
+      return response;        
+    }else{
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body); // Decode http response that recive of server from Json to Dart
+        if (data['code'] == '0000') {
+          print(data);
+          // final task = taskFromJson(jsonEncode(data['response']));
+          // return task;
+        } else if (data['code'] == '0001'){
+          print(data);
+          // return '0001';
+        } else {
+          return Globals.checkInternet;
+        }
+      } else if (response.statusCode == 500) {
+        return Globals.checkServer;
+      } else {
+        return Globals.checkServer;
+      }
     }
   }
 
-  Future<void> updateTask(Task task) async {
-    final response = await http.put(Uri.parse('$_baseUrl/${task.id}'), body: {'isDone': task.isDone.toString()});
-    if (response.statusCode != 204) {
-      throw Exception('Failed to update task');
+  Future updateTask(Task task, int id) async {
+    String url = '${Globals.apiUrl}/task/$id';
+    var body = jsonEncode({
+      'description': task.description,
+      'date': "2019-01-01T00:00:00Z",
+    });
+    final response = await _services.putHttp(url, body, 0);
+    if(response is String){
+      return response;        
+    }else{
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body); // Decode http response that recive of server from Json to Dart
+        if (data['code'] == '0000') {
+          print(data);
+          final tags = taskFromJson(jsonEncode(data['response']));
+          // return task;
+        } else if (data['code'] == '0001'){
+          print(data);
+          // return '0001';
+        } else {
+          return Globals.checkInternet;
+        }
+      } else if (response.statusCode == 500) {
+        return Globals.checkServer;
+      } else {
+        return Globals.checkServer;
+      }
     }
   }
 
-  Future<void> deleteTask(Task task) async {
-    final response = await http.delete(Uri.parse('$_baseUrl/${task.id}'));
-    if (response.statusCode != 204) {
-      throw Exception('Failed to delete task');
-    }
-  }
+  // Future<void> deleteTask(TaskList task) async {
+    // final response = await http.delete(Uri.parse('$_baseUrl/${task.id}'));
+    // if (response.statusCode != 204) {
+    //   throw Exception('Failed to delete task');
+    // }
+  // }
 
   /*Tags */
 

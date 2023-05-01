@@ -21,8 +21,7 @@ class Service {
   };
 
   headerAccessToken() async {
-    String? accessToken = '';
-   // await _storage.read(key: 'accessToken');
+    String? accessToken = await _storage.read(key: 'accessToken');
     return <String, String>{
       'Authorization': 'Bearer $accessToken',
       'Accept': 'application/json',
