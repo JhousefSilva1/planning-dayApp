@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:tasks/cubit/auth/auth_cubit.dart';
 import 'package:tasks/data/models/tasks.dart';
@@ -17,7 +18,7 @@ import 'package:quickalert/quickalert.dart';
 class TaskPanel extends StatelessWidget {
   //controllres
 
-  // final _titleController = TextEditingController();
+  final _titleController = TextEditingController();
   // final _subtitleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _dateController = TextEditingController();
@@ -25,7 +26,8 @@ class TaskPanel extends StatelessWidget {
   final _statusController = TextEditingController();
   String? _selectTag;
   final _formKey = GlobalKey<FormState>();
-  late Task _task = Task(labelIds: [], isDone: false);
+  late Task _task = Task(labelIds: [], isDone: false, isDelete: false);
+  late Task _newTask = Task(labelIds: [], isDone: false, isDelete: false);
 
   TaskPanel({super.key});
 
@@ -33,127 +35,166 @@ class TaskPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (_) => TaskCubit(TaskService(), TagsService()),
-        child: BlocBuilder<TaskCubit, TaskState>(
-        //   listener: (context, state) {
-        //   if (state is TaskInitial) {
-        //     // ignore: avoid_print
-        //     print('TaskInitial');
-        //   } else if (state is TaskInternetFailure) {
-        //     QuickAlert.show(
-        //         context: context,
-        //         type: QuickAlertType.error,
-        //         text: 'No hay internet');
-        //   } else if (state is TaskServerFailure) {
-        //     QuickAlert.show(
-        //         context: context,
-        //         type: QuickAlertType.error,
-        //         text: 'No hay servidor');
-        //   } else if (state is TaskSuccess) {
-        //     final movies = state.task;
-      
-        //     return ListView.builder(
-        //       itemCount: movies.length,
-        //       itemBuilder: (context, index) => Card(
-        //         child: ListTile(
-        //           title: Text(movies[index].title),
-        //           leading: CircleAvatar(
-        //             backgroundImage: NetworkImage(movies[index].urlImage),
-        //           ),
-        //         ),
-        //       ),
-        //     );
-        //     // QuickAlert.show(
-        //     //     context: context,
-        //     //     type: QuickAlertType.success,
-        //     //     text: 'Tarea creada');
-        //   } else {
-        //     QuickAlert.show(
-        //         context: context,
-        //         type: QuickAlertType.error,
-        //         text: 'Error desconocido');
-        //   }
-        // }, 
-        builder: (context, state) {
+        child: BlocBuilder<TaskCubit, TaskState>(builder: (context, state) {
           if (state is TaskInitial) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (state is TaskFail) {
-            return Center(
+            return const Center(
               child: Icon(Icons.close),
             );
           } else if (state is TaskSuccess) {
-            final task = state.task;
+            var tasks = [];
+            final taskList = state.task;
+            for (var i = 0; i < taskList.length; i++) {
+              if (taskList[i].isDelete == false) {
+                tasks.add(taskList[i]);
+              }
+            }
+            final task = tasks;
             final tags = state.tags;
             return Scaffold(
-                appBar: AppBar(
-                  backgroundColor: const Color(0xFF004070),
-                  title: const Text('Task Panel'),
-                  actions: [
-                    IconButton(
-                        onPressed: () async{
-                          Navigator.of(context).pushNamed('/login');
-                        },
-                        icon: const Icon(Icons.logout_outlined)),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('');
-                        },
-                        icon: const Icon(Icons.category_rounded)),
-                  ],
-                ),
-                body: RefreshIndicator(
-                  onRefresh: () => context.read<TaskCubit>().allTasks(),
-                  child: ListView.builder(
-                    itemCount: task.length,
-                    itemBuilder: (context, index) => Card(
-                      child: ListTile(
-                        title: Column(
-                          children: [
-                            Text(task[index].description!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                            Text(DateFormat("dd-MM-yyyy HH:mm:ss").format(task[index].date!), style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: task[index].labelIds.length,
-                              itemBuilder: (context, indexs) {
-                                var name;
-                                for (var i = 0; i < tags.length; i++) {
-                                  if(tags[i].labelId == task[index].labelIds[indexs]){
-                                    name = tags[i].name;
-                                  }
-                                } 
-                                return Chip(label: Text(name));
+              appBar: AppBar(
+                backgroundColor: const Color(0xFF004070),
+                title: const Text('Task Panel'),
+                actions: [
+                  IconButton(
+                      onPressed: () async {
+                        Navigator.of(context).pushNamed('/login');
+                      },
+                      icon: const Icon(Icons.logout_outlined)),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/tags_panel');
+                      },
+                      icon: const Icon(Icons.category_rounded)),
+                ],
+              ),
+              body: RefreshIndicator(
+                onRefresh: () => context.read<TaskCubit>().allTasks(),
+                child: ListView.builder(
+                  itemCount: task.length,
+                  itemBuilder: (context, index) => Card(
+                    child: Slidable(
+                      key: Key(task[index].taskId.toString()),
+                      // The end action pane is the one at the right or the bottom side.
+                      endActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (context) {
+                              for (var i = 0; i < taskList.length; i++) {
+                                if (taskList[i].taskId == task[index].taskId) {
+                                  _newTask = taskList[i];
+                                  // _newTask = task[index];
+                                  _newTask.isDelete = true;
+                                  context
+                                      .read<TaskCubit>()
+                                      .updateTask(_newTask, i + 1);
+                                }
                               }
+                            },
+                            backgroundColor: const Color(0xFFFE4A49),
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
+                            label: 'Delete',
+                          ),
+                        ],
+                      ),
+                      child: ListTile(
+                        title: Card(
+                          // color: const Color(0xFF004070),
+
+                          // ignore: sized_box_for_whitespace
+
+                          child: Container(
+                            width: 400,
+                            height: 100,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(task[index].title!,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xffffcc00),
+                                      //alinear a la izquierda
+                                    )),
+                                Text(task[index].description!,
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold)),
+                                Text(
+                                    DateFormat("dd-MM-yyyy HH:mm:ss").format(
+                                        DateTime.parse(task[index].date!)),
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500)),
+                                ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: task[index].labelIds.length,
+                                    itemBuilder: (context, indexs) {
+                                      var name;
+                                      for (var i = 0; i < tags.length; i++) {
+                                        if (tags[i].labelId ==
+                                            task[index].labelIds[indexs]) {
+                                          name = tags[i].name;
+                                        }
+                                      }
+                                      return Chip(label: Text(name));
+                                    }),
+                                task[index].isDone
+                                    ? const Text('Completado',
+                                        style: TextStyle(
+                                            color: Color(0xff00cc00),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold))
+                                    : Container(),
+                              ],
                             ),
-                            task[index].isDone? Text('Completado', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)):Container(),
-                          ],
+                          ),
                         ),
                         leading: Checkbox(
                           value: task[index].isDone,
                           onChanged: (value) {
-                            print(task[index].isDone);
-                          
-                            // task[index].isDone = value!;
-                            // print(task[index].isDone);
+                            _newTask = task[index];
+                            _newTask.isDone = value!;
+                            context
+                                .read<TaskCubit>()
+                                .updateTask(_newTask, index + 1);
                           },
-
                         ),
                       ),
+
+                      // The action pane is the one at the left or the top side.
                     ),
                   ),
                 ),
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () {
-                    QuickAlert.show(
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  //agregar icono de agregar tarea
+
+                  _titleController.clear();
+                  _descriptionController.clear();
+                  _dateController.clear();
+                  _tagsController.clear();
+                  _statusController.clear();
+
+                  QuickAlert.show(
                       context: context,
                       type: QuickAlertType.custom,
                       showCancelBtn: true,
                       onConfirmBtnTap: () {
-                        _task.date = DateTime.now();
+                        _task.date = _dateController.text;
                         _task.description = _descriptionController.text;
-                        // _task!.labelIds = 
+                        _task.title = _titleController.text;
+                        // _task!.labelIds =
                         context.read<TaskCubit>().createTask(_task);
                         Navigator.of(context).pop();
+                        //icon
                       },
                       confirmBtnText: 'Save',
                       onCancelBtnTap: () {
@@ -169,65 +210,39 @@ class TaskPanel extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-            
+
                           // ignore: unnecessary_const
-                          // const SizedBox(height: 20),
-            
-                          // TextFormField(
-                          //   //controller title
-            
-                          //   controller: _titleController,
-                          //   keyboardType: TextInputType.multiline,
-                          //   maxLines: null,
-                          //   textInputAction: TextInputAction.newline,
-                          //   decoration: const InputDecoration(
-                          //     label: Text('Task Title'),
-                          //     hintText: 'Ener a Task Title',
-                          //     border: OutlineInputBorder(
-                          //       borderRadius: BorderRadius.all(
-                          //         Radius.circular(20),
-                          //       ),
-                          //     ),
-                          //   ),
-                          //   validator: (value) {
-                          //     if (value!.isEmpty) {
-                          //       return 'Please enter a Task Title';
-                          //     }
-                          //     return null;
-                          //   },
-                          // ),
-            
-                          // const SizedBox(height: 20),
-            
-                          // TextFormField(
-                          //   //controller subtitle
-            
-                          //   controller: _subtitleController,
-                          //   keyboardType: TextInputType.multiline,
-                          //   maxLines: null,
-                          //   textInputAction: TextInputAction.newline,
-                          //   decoration: const InputDecoration(
-                          //     label: Text('Task Subtitle'),
-                          //     hintText: 'Ener a Task Subtitle',
-                          //     border: OutlineInputBorder(
-                          //       borderRadius: BorderRadius.all(
-                          //         Radius.circular(20),
-                          //       ),
-                          //     ),
-                          //   ),
-                          //   validator: (value) {
-                          //     if (value!.isEmpty) {
-                          //       return 'Please enter a Task Subtitle';
-                          //     }
-                          //     return null;
-                          //   },
-                          // ),
-            
                           const SizedBox(height: 20),
-            
+
+                          TextFormField(
+                            //controller title
+
+                            controller: _titleController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            textInputAction: TextInputAction.newline,
+                            decoration: const InputDecoration(
+                              label: Text('Task Title'),
+                              hintText: 'Ener a Task Title',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a Task Title';
+                              }
+                              return null;
+                            },
+                          ),
+
+                          const SizedBox(height: 20),
+
                           TextFormField(
                             //controller description
-            
+
                             controller: _descriptionController,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
@@ -248,9 +263,9 @@ class TaskPanel extends StatelessWidget {
                               return null;
                             },
                           ),
-            
+
                           const SizedBox(height: 20),
-            
+
                           TextFormField(
                               controller: _dateController,
                               keyboardType: TextInputType.datetime,
@@ -271,7 +286,7 @@ class TaskPanel extends StatelessWidget {
                                   firstDate: DateTime.now(),
                                   lastDate: DateTime(2101),
                                 );
-            
+
                                 TimeOfDay? timePicked = await showTimePicker(
                                   context: context,
                                   initialTime: TimeOfDay.now(),
@@ -284,7 +299,7 @@ class TaskPanel extends StatelessWidget {
                                     );
                                   },
                                 );
-            
+
                                 if (picked != null && timePicked != null) {
                                   DateTime pickedDate = DateTime(
                                     picked.year,
@@ -293,21 +308,21 @@ class TaskPanel extends StatelessWidget {
                                     timePicked.hour,
                                     timePicked.minute,
                                   );
-            
+
                                   if (pickedDate.isBefore(DateTime.now())) {
                                     // La fecha y hora seleccionadas son anteriores a la actual
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title: Text('Error'),
-                                          content: Text(
+                                          title: const Text('Error'),
+                                          content: const Text(
                                               'La fecha y hora seleccionadas son anteriores a la actual.'),
                                           actions: [
                                             TextButton(
                                               onPressed: () =>
                                                   Navigator.of(context).pop(),
-                                              child: Text('OK'),
+                                              child: const Text('OK'),
                                             ),
                                           ],
                                         );
@@ -315,55 +330,21 @@ class TaskPanel extends StatelessWidget {
                                     );
                                   } else {
                                     String formattedDate =
-                                        DateFormat('dd/MM/yyyy HH:mm:ss')
+                                        DateFormat('yyyy-MM-ddTHH:mm:ss')
                                             .format(pickedDate);
                                     _dateController.text = formattedDate;
                                   }
                                 }
                               },
-                              // onTap: () async {
-                              //   DateTime? picked = await showDatePicker(
-                              //       context: context,
-                              //       initialDate: DateTime.now(),
-                              //       firstDate: DateTime.now(),
-                              //       lastDate: DateTime(2101));
-            
-                              //   TimeOfDay? timePicked = await showTimePicker(
-                              //     context: context,
-                              //     initialTime: TimeOfDay.now(),
-                              //     //impedir que se selecciones fechas y horas pasadas
-                              //     builder:
-                              //         (BuildContext context, Widget? child) {
-                              //       return MediaQuery(
-                              //         data: MediaQuery.of(context).copyWith(
-                              //             alwaysUse24HourFormat: true),
-                              //         child: child!,
-                              //       );
-                              //     },
-                              //   );
-            
-                              //   if (picked != null && timePicked != null) {
-                              //     String formatteDate =
-                              //         DateFormat('dd/MM/yyyy HH:mm:ss')
-                              //             .format(DateTime(
-                              //       picked.year,
-                              //       picked.month,
-                              //       picked.day,
-                              //       timePicked.hour,
-                              //       timePicked.minute,
-                              //     ));
-                              //     _dateController.text = formatteDate;
-                              //   }
-                              // },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter a Date';
                                 }
                                 return null;
                               }),
-            
+
                           const SizedBox(height: 20),
-            
+
                           DropdownButtonFormField(
                             items: tags.map((option) {
                               return DropdownMenuItem(
@@ -386,16 +367,18 @@ class TaskPanel extends StatelessWidget {
                             ),
                           ),
                         ],
-                      )
-                    );
-                  }
+                      ));
+                },
+                child: const Icon(
+                  Icons.add_task,
+                  color: Color(0xFF004070),
+                ),
+                hoverColor: Colors.amber,
               ),
             );
           } else {
             return Container();
           }
-        }
-      )
-    );
+        }));
   }
 }

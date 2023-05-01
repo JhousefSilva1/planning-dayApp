@@ -41,8 +41,9 @@ class TaskService {
     String url = '${Globals.apiUrl}/task';
     var body = jsonEncode({
       'description': task.description,
-      'date': "2019-03-03T00:00:00Z",
-      'labelIds': task.labelIds
+      'date': task.date,
+      'labelIds': task.labelIds,
+      'title': task.title
     });
     final response = await _services.postHttp(url, body, 0);
     if(response is String){
@@ -72,7 +73,11 @@ class TaskService {
     String url = '${Globals.apiUrl}/task/$id';
     var body = jsonEncode({
       'description': task.description,
-      'date': "2019-01-01T00:00:00Z",
+      'date': task.date,
+      'labelIds': task.labelIds,
+      'title': task.title,
+      'isDone': task.isDone,
+      'isDelete': task.isDelete,
     });
     final response = await _services.putHttp(url, body, 0);
     if(response is String){
@@ -81,12 +86,9 @@ class TaskService {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body); // Decode http response that recive of server from Json to Dart
         if (data['code'] == '0000') {
-          print(data);
-          final tags = taskFromJson(jsonEncode(data['response']));
-          // return task;
+          return data['code'];
         } else if (data['code'] == '0001'){
-          print(data);
-          // return '0001';
+          return data['code'];
         } else {
           return Globals.checkInternet;
         }

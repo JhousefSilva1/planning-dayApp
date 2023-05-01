@@ -1,28 +1,29 @@
-abstract class TagsState{}
+import 'package:tasks/data/models/tags.dart';
+import 'package:tasks/data/models/tasks.dart';
 
-class TagsInitial extends TagsState{}
+abstract class TagsState {}
 
-class TagsInternetFailure extends TagsState{}
-
-class TagsServerFailure extends TagsState{}
-
-class TagsSuccess extends TagsState{}
-
-abstract class TagsEvent{}
-
-class TagsStarted extends TagsEvent{}
-
-class TagsCreateSuccess extends TagsState{}
-
-class TagsFailCreate extends TagsState{}
-
-
-class TagsLoaded extends TagsState {
-  final List<String> tags;
-
-  TagsLoaded(this.tags);
-
-  @override
-  List<Object> get props => [tags];
+class TagsInitial extends TagsState {
+  List get props => [];
 }
 
+class TagsInternetFailure extends TagsState {}
+
+class TagsServerFailure extends TagsState {}
+
+class TagsSuccess extends TagsState {
+  TagsSuccess(this.tags);
+
+  late final List<Tags> tags;
+
+  @override
+  List get props => [tags];
+}
+
+abstract class TaskEvent {}
+
+class TagsStarted extends TaskEvent {}
+
+class TagsCreateSuccess extends TagsState {}
+
+class TagsFail extends TagsState {}

@@ -28,66 +28,35 @@ class LoginScreen extends StatelessWidget {
       create: (_) => AuthCubit(AuthService()),
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          if (state is AuthInitial) {
-          } else if (state is AuthInternetFailure) {
+          if(state is AuthInitial){
+
+          }else if(state is AuthInternetFailure){
             QuickAlert.show(
-                context: context,
-                type: QuickAlertType.error,
-                text: Globals.checkInternet);
-          } else if (state is AuthServerFailure) {
+              context: context,
+              type: QuickAlertType.error,
+              text: Globals.checkInternet
+            );
+          }else if(state is AuthServerFailure){
             QuickAlert.show(
-                context: context,
-                type: QuickAlertType.error,
-                text: Globals.checkServer);
-          } else if (state is AuthCredentialsFailure) {
+              context: context,
+              type: QuickAlertType.error,
+              text: Globals.checkServer
+            );
+          }else if(state is AuthCredentialsFailure){
             QuickAlert.show(
-                context: context,
-                type: QuickAlertType.error,
-                text: 'Credenciales invalidas. Revise por favor.');
-          } else if (state is AuthSuccess) {
+              context: context,
+              type: QuickAlertType.error,
+              text: 'Credenciales invalidas. Revise por favor.'
+            );
+          }else if(state is AuthSuccess){
             Navigator.pushNamed(context, '/task_panel');
-          } else {
+          }else{
             QuickAlert.show(
-                context: context,
-                type: QuickAlertType.error,
-                text: Globals.checkServer);
+              context: context,
+              type: QuickAlertType.error,
+              text: Globals.checkServer
+            );
           }
-          // if (state is AuthFailure) {
-          //   showDialog(
-          //     context: context,
-          //     builder: (context) => AlertDialog(
-          //       title: Text('Error de inicio de sesión'),
-          //       content: Text( 'Ha ocurrido un error.'),
-          //       actions: [
-          //         TextButton(
-          //           onPressed: () {
-          //             // context.read<AuthCubit>().reset();
-          //             Navigator.pop(context);
-          //           },
-          //           child: Text('OK'),
-          //         ),
-          //       ],
-          //     ),
-          //   );
-          // } else if (state is AuthSuccess) {
-          //   showDialog(
-          //     context: context,
-          //     builder: (context) => AlertDialog(
-          //       title: Text('Inicio de sesión exitoso'),
-          //       content: Text('¡Bienvenido!'),
-          //       actions: [
-          //         TextButton(
-          //           onPressed: () {
-          //             // context.read<AuthCubit>().reset();
-          //             Navigator.pop(context);
-          //             // Redirigir al usuario a otra página
-          //           },
-          //           child: Text('OK'),
-          //         ),
-          //       ],
-          //     ),
-          //   );
-          // }
         },
         builder: (context, state) {
           return Scaffold(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
 import 'package:tasks/app/constants.dart';
 import 'package:tasks/data/models/tags.dart';
 import 'package:tasks/data/service/service.dart';
@@ -32,10 +33,12 @@ class TagsService{
   }
 
   Future createTags(Tags tags) async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss').format(now);
     String url = '${Globals.apiUrl}/label';
     var body = jsonEncode({
       'name': tags.name,
-      'date': "2019-01-01T00:00:00Z"
+      'date': formattedDate
     });
     final response = await _services.postHttp(url, body, 0);
     if(response is String){
@@ -63,9 +66,12 @@ class TagsService{
 
   Future updateTags(Tags tags, int id) async {
     String url = '${Globals.apiUrl}/label/$id';
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss').format(now);
     var body = jsonEncode({
       'name': tags.name,
-      'date': "2019-01-01T00:00:00Z",
+      'date': formattedDate,
+      'isDelete': tags.isDelete
     });
     final response = await _services.putHttp(url, body, 0);
     if(response is String){
